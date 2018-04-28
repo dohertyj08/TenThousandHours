@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -54,7 +55,26 @@ public class TrainingActivity extends AppCompatActivity {
         gif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // todo
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        db = SkillDatabase.getDatabase(getApplicationContext());
+                        long currentTrainingTime = skill.getTime();
+                        currentTrainingTime += System.currentTimeMillis() - skill.getTraining_start();
+                        skill.setTime(currentTrainingTime);
+                        skill.setTraining_start(-1);
+                        db.skillDao().updateSkill(skill);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Stopped Training " + skillName, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        finish();
+                    }
+                });
             }
         });
     }

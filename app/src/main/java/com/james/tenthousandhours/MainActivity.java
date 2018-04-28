@@ -2,12 +2,19 @@ package com.james.tenthousandhours;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -122,10 +129,14 @@ public class MainActivity extends ListActivity {
                             final Skill skill = skillAdapter.getItem(x);
                             long trainingStart = skill.getTraining_start();
                             if (trainingStart != -1) {
+                                Helpers h = new Helpers();
                                 long currentTrainingTime = skill.getTime();
                                 final long newTrainingTime = currentTrainingTime + (System.currentTimeMillis() - trainingStart);
                                 final int position = x;
-                                String temp = Long.toString(newTrainingTime);
+
+                                if (h.getCurrentLevel(currentTrainingTime) < h.getCurrentLevel(newTrainingTime)) {
+                                    sendNotification();
+                                }
 
                                 AsyncTask.execute(new Runnable() {
                                     @Override
@@ -145,6 +156,32 @@ public class MainActivity extends ListActivity {
                 });
             }
         }, 0,1, TimeUnit.SECONDS);
+    }
+
+    private void sendNotification() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            NotificationChannel channel = new NotificationChannel("id", name, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(description);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, "id")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Congradulations!")
+                .setContentText("Good job! Keep training to become a master!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        notificationManagerCompat.notify(0, builder.build());
     }
 
     @Override
@@ -209,7 +246,8 @@ public class MainActivity extends ListActivity {
     private class SkillAdapter extends BaseAdapter {
         private ArrayList<Skill> skillArrayList = new ArrayList<Skill>();
         private LayoutInflater inflater;
-        private String motivationText = "You're doing great!";
+        private ArrayList<String> motivationTextList = new ArrayList<>();
+        // private String motivationText = "You're doing great!";
 
         public SkillAdapter() {
             inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -245,7 +283,9 @@ public class MainActivity extends ListActivity {
         }
 
         public void addSkill(final Skill skill) {
+            Helpers h = new Helpers();
             skillArrayList.add(skill);
+            motivationTextList.add(h.getMotivational());
             //notifyDataSetChanged();
         }
 
@@ -318,9 +358,9 @@ public class MainActivity extends ListActivity {
                     }
                 } else {
                     if (Math.random() > .98)
-                        motivationText = h.getMotivational();
+                        motivationTextList.set(position, h.getMotivational());
 
-                    training = motivationText;
+                    training = motivationTextList.get(position);
                 }
 
                 vh.skillLevel.setText(level);
