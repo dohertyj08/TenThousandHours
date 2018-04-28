@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -232,6 +233,9 @@ public class MainActivity extends ListActivity {
                 public void run() {
                     db = SkillDatabase.getDatabase(getApplicationContext());
                     List<Skill> allSkills = db.skillDao().getAll();
+
+                    Collections.sort(allSkills, new SkillComparer());
+                    Collections.reverse(allSkills);
 
                     for (Skill skill : allSkills ) {
                         skillAdapter.addSkill(skill);
