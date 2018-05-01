@@ -1,5 +1,6 @@
 package com.james.tenthousandhours;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 public class Helpers {
@@ -81,5 +82,34 @@ public class Helpers {
             default:
                 return "Keep it up";
         }
+    }
+
+    public int[] getColorArray(Context c, String scheme) {
+        int[] colors = new int[10];
+
+        if (scheme.equals("green")) {
+            colors[0] = c.getResources().getColor(R.color.green1);
+            colors[1] = c.getResources().getColor(R.color.green2);
+            colors[2] = c.getResources().getColor(R.color.green3);
+            colors[3] = c.getResources().getColor(R.color.green4);
+            colors[4] = c.getResources().getColor(R.color.green5);
+            colors[5] = c.getResources().getColor(R.color.green6);
+            colors[6] = c.getResources().getColor(R.color.green7);
+            colors[7] = c.getResources().getColor(R.color.green8);
+            colors[8] = c.getResources().getColor(R.color.green9);
+            colors[9] = c.getResources().getColor(R.color.green0);
+        } else {
+            colors[0] = c.getResources().getColor(R.color.blue1);
+            colors[1] = c.getResources().getColor(R.color.blue2);
+            colors[2] = c.getResources().getColor(R.color.blue3);
+            colors[3] = c.getResources().getColor(R.color.blue4);
+            colors[4] = c.getResources().getColor(R.color.blue5);
+            colors[5] = c.getResources().getColor(R.color.blue6);
+            colors[6] = c.getResources().getColor(R.color.blue7);
+            colors[7] = c.getResources().getColor(R.color.blue8);
+            colors[8] = c.getResources().getColor(R.color.blue9);
+            colors[9] = c.getResources().getColor(R.color.blue0);
+        }
+        return colors;
     }
 }

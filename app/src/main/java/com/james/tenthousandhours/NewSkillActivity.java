@@ -16,6 +16,14 @@ public class NewSkillActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String colorScheme = getIntent().getStringExtra("colorscheme");
+
+        if (colorScheme != null) {
+            if (colorScheme.equals("green")) {
+                setTheme(R.style.AppThemeGreen);
+            }
+        }
+
         setContentView(R.layout.activity_new_skill);
 
         final long id = getIntent().getLongExtra("id", -1);

@@ -25,10 +25,19 @@ public class TrainingActivity extends AppCompatActivity {
 
     private ScheduledExecutorService executor;
     private int counter;
+    private String colorScheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        colorScheme = getIntent().getStringExtra("colorscheme");
+
+        if (colorScheme != null) {
+            if (colorScheme.equals("green")) {
+                setTheme(R.style.AppThemeGreen);
+            }
+        }
+
         setContentView(R.layout.activity_train_skill);
 
         final long id = getIntent().getLongExtra("id", -1);
@@ -131,6 +140,7 @@ public class TrainingActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                Helpers h = new Helpers();
                 LinearLayout ll = findViewById(R.id.trainingLayout);
                 ProgressBar pb = findViewById(R.id.trainProgress);
                 TextView title = findViewById(R.id.trainingTitle);
@@ -143,26 +153,29 @@ public class TrainingActivity extends AppCompatActivity {
 
                 title.setText(skillName + " [level " + Integer.toString(intLevel) + "]");
                 pb.setProgress(percent);
+
+                int[] colors = h.getColorArray(getApplicationContext(), colorScheme);
+
                 if (intLevel < 10) {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color1));
+                    ll.setBackgroundColor(colors[0]);
                 } else if (intLevel < 20) {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color2));
+                    ll.setBackgroundColor(colors[1]);
                 } else if (intLevel < 30) {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color3));
+                    ll.setBackgroundColor(colors[2]);
                 } else if (intLevel < 40) {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color4));
+                    ll.setBackgroundColor(colors[3]);
                 } else if (intLevel < 50) {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color5));
+                    ll.setBackgroundColor(colors[4]);
                 } else if (intLevel < 60) {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color6));
+                    ll.setBackgroundColor(colors[5]);
                 } else if (intLevel < 70) {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color7));
+                    ll.setBackgroundColor(colors[6]);
                 } else if (intLevel < 80) {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color8));
+                    ll.setBackgroundColor(colors[7]);
                 } else if (intLevel < 90) {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color9));
+                    ll.setBackgroundColor(colors[8]);
                 } else {
-                    ll.setBackgroundColor(getResources().getColor(R.color.color0));
+                    ll.setBackgroundColor(colors[9]);
                 }
             }
         });

@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -22,6 +21,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -49,8 +49,38 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // I think the next 20ish lines are ugly
+        AsyncTask at = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                db = SkillDatabase.getDatabase(getApplicationContext());
+                List<Settings> settings = db.settingsDao().getAll();
+                if (settings.size() == 0) {
+                    Settings setting = new Settings("blue", 0);
+                    db.settingsDao().insertSettings(setting);
+                } else {
+                    Settings setting = settings.get(0);
+                    colorScheme = setting.getColorscheme();
+                }
+                return null;
+            }
+        };
+
+        at.execute();
+        try {
+            at.get(1000, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            colorScheme = "blue";
+        }
+
+        if (colorScheme != null) {
+            if (colorScheme.equals("green")) {
+                setTheme(R.style.AppThemeGreen);
+            }
+        }
+
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         //Add new skill floating button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -58,24 +88,8 @@ public class MainActivity extends ListActivity {
             @Override
             public void onClick(View view) {
                 Intent newSkill = new Intent(MainActivity.this, NewSkillActivity.class);
+                newSkill.putExtra("colorscheme", colorScheme);
                 MainActivity.this.startActivity(newSkill);
-            }
-        });
-
-        //init settings
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                db = SkillDatabase.getDatabase(getApplicationContext());
-                List<Settings> settings = db.settingsDao().getAll();
-                if (settings.size() == 0) {
-                    Settings setting = new Settings("blue", 0);
-                    colorScheme = "blue";
-                    db.settingsDao().insertSettings(setting);
-                } else {
-                    Settings setting = settings.get(0);
-                    colorScheme = setting.getColorscheme();
-                }
             }
         });
 
@@ -114,12 +128,23 @@ public class MainActivity extends ListActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent editSkill = new Intent(MainActivity.this, NewSkillActivity.class);
                                 editSkill.putExtra("id", skillAdapter.getItem(position).getId());
+                                editSkill.putExtra("colorscheme", colorScheme);
                                 MainActivity.this.startActivity(editSkill);
                             }
                         })
                         .show();
 
                 return true;
+            }
+        });
+
+        ImageButton ib = findViewById(R.id.imageButton);
+        ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                settingsIntent.putExtra("colorscheme", colorScheme);
+                MainActivity.this.startActivity(settingsIntent);
             }
         });
     }
@@ -246,6 +271,7 @@ public class MainActivity extends ListActivity {
                     skill.setTraining_start(System.currentTimeMillis());
                     Intent trainSkill = new Intent(MainActivity.this, TrainingActivity.class);
                     trainSkill.putExtra("id", skill.getId());
+                    trainSkill.putExtra("colorscheme", colorScheme);
                     MainActivity.this.startActivity(trainSkill);
                 } else {
                     long currentTrainingTime = skill.getTime();
@@ -385,63 +411,63 @@ public class MainActivity extends ListActivity {
                 vh.skillInfo.setText(training);
                 vh.skillProgress.setProgress(h.percentToNextLevel(currentTrainingTime));
 
-                int[] colors = new int[10];
-                colors = getColorArray(colorScheme);
+                int[] colors = h.getColorArray(getApplicationContext(), colorScheme);
 
                 if (intLevel < 10) {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color1));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color1));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color1));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color1));
+                    vh.skillLevel.setBackgroundColor(colors[0]);
+                    vh.skillName.setBackgroundColor(colors[0]);
+                    vh.skillInfo.setBackgroundColor(colors[0]);
+                    vh.skillProgress.setBackgroundColor(colors[0]);
                 } else if (intLevel < 20) {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color2));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color2));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color2));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color2));
+                    vh.skillLevel.setBackgroundColor(colors[1]);
+                    vh.skillName.setBackgroundColor(colors[1]);
+                    vh.skillInfo.setBackgroundColor(colors[1]);
+                    vh.skillProgress.setBackgroundColor(colors[1]);
                 } else if (intLevel < 30) {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color3));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color3));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color3));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color3));
+                    vh.skillLevel.setBackgroundColor(colors[2]);
+                    vh.skillName.setBackgroundColor(colors[2]);
+                    vh.skillInfo.setBackgroundColor(colors[2]);
+                    vh.skillProgress.setBackgroundColor(colors[2]);
                 } else if (intLevel < 40) {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color4));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color4));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color4));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color4));
+                    vh.skillLevel.setBackgroundColor(colors[3]);
+                    vh.skillName.setBackgroundColor(colors[3]);
+                    vh.skillInfo.setBackgroundColor(colors[3]);
+                    vh.skillProgress.setBackgroundColor(colors[3]);
                 } else if (intLevel < 50) {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color5));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color5));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color5));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color5));
+                    vh.skillLevel.setBackgroundColor(colors[4]);
+                    vh.skillName.setBackgroundColor(colors[4]);
+                    vh.skillInfo.setBackgroundColor(colors[4]);
+                    vh.skillProgress.setBackgroundColor(colors[4]);
                 } else if (intLevel < 60) {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color6));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color6));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color6));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color6));
+                    vh.skillLevel.setBackgroundColor(colors[5]);
+                    vh.skillName.setBackgroundColor(colors[5]);
+                    vh.skillInfo.setBackgroundColor(colors[5]);
+                    vh.skillProgress.setBackgroundColor(colors[5]);
                 } else if (intLevel < 70) {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color7));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color7));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color7));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color7));
+                    vh.skillLevel.setBackgroundColor(colors[6]);
+                    vh.skillName.setBackgroundColor(colors[6]);
+                    vh.skillInfo.setBackgroundColor(colors[6]);
+                    vh.skillProgress.setBackgroundColor(colors[6]);
                 } else if (intLevel < 80) {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color8));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color8));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color8));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color8));
+                    // white text
+                    vh.skillLevel.setBackgroundColor(colors[7]);
+                    vh.skillName.setBackgroundColor(colors[7]);
+                    vh.skillInfo.setBackgroundColor(colors[7]);
+                    vh.skillProgress.setBackgroundColor(colors[7]);
                 } else if (intLevel < 90) {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color9));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color9));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color9));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color9));
+                    // white text
+                    vh.skillLevel.setBackgroundColor(colors[8]);
+                    vh.skillName.setBackgroundColor(colors[8]);
+                    vh.skillInfo.setBackgroundColor(colors[8]);
+                    vh.skillProgress.setBackgroundColor(colors[8]);
                 } else {
-                    vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color0));
-                    vh.skillName.setBackgroundColor(getResources().getColor(R.color.color0));
-                    vh.skillInfo.setBackgroundColor(getResources().getColor(R.color.color0));
-                    vh.skillProgress.setBackgroundColor(getResources().getColor(R.color.color0));
+                    // white text
+                    vh.skillLevel.setBackgroundColor(colors[9]);
+                    vh.skillName.setBackgroundColor(colors[9]);
+                    vh.skillInfo.setBackgroundColor(colors[9]);
+                    vh.skillProgress.setBackgroundColor(colors[9]);
                 }
-                //convertView.setTag(vh);
             }
-
             return convertView;
         }
     }
@@ -451,12 +477,6 @@ public class MainActivity extends ListActivity {
         public TextView skillInfo;
         public TextView skillLevel;
         public ProgressBar skillProgress;
-    }
-
-    public int[] getColorArray(String scheme) {
-        int[] colors = new int[10];
-
-        colors[0] = getResources().ge
     }
 
 }
