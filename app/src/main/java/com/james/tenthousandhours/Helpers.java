@@ -98,6 +98,17 @@ public class Helpers {
             colors[7] = c.getResources().getColor(R.color.green8);
             colors[8] = c.getResources().getColor(R.color.green9);
             colors[9] = c.getResources().getColor(R.color.green0);
+        } else if (scheme.equals("mono")) {
+            colors[0] = c.getResources().getColor(R.color.mono1);
+            colors[1] = c.getResources().getColor(R.color.mono2);
+            colors[2] = c.getResources().getColor(R.color.mono3);
+            colors[3] = c.getResources().getColor(R.color.mono4);
+            colors[4] = c.getResources().getColor(R.color.mono5);
+            colors[5] = c.getResources().getColor(R.color.mono6);
+            colors[6] = c.getResources().getColor(R.color.mono7);
+            colors[7] = c.getResources().getColor(R.color.mono8);
+            colors[8] = c.getResources().getColor(R.color.mono9);
+            colors[9] = c.getResources().getColor(R.color.mono0);
         } else {
             colors[0] = c.getResources().getColor(R.color.blue1);
             colors[1] = c.getResources().getColor(R.color.blue2);

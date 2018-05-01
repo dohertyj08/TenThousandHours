@@ -23,4 +23,16 @@
     <color name="green8">#388E3C</color>
     <color name="green9">#2E7D32</color>
     <color name="green0">#1B5E20</color>
+
+    <color name="colorPrimaryMono">#101010</color>
+    <color name="mono1">#FAFAFA</color>
+    <color name="mono2">#F5F5F5</color>
+    <color name="mono3">#EEEEEE</color>
+    <color name="mono4">#E0E0E0</color>
+    <color name="mono5">#BDBDBD</color>
+    <color name="mono6">#9E9E9E</color>
+    <color name="mono7">#757575</color>
+    <color name="mono8">#616161</color>
+    <color name="mono9">#424242</color>
+    <color name="mono0">#212121</color>
 </resources>

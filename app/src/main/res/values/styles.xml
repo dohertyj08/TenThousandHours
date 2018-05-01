@@ -18,10 +18,15 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppThemeGreen" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryGreen</item>
         <item name="colorPrimaryDark">@color/green0</item>
         <item name="colorAccent">@color/green0</item>
+    </style>
+
+    <style name="AppThemeMono" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryMono</item>
+        <item name="colorPrimaryDark">@color/mono0</item>
+        <item name="colorAccent">@color/mono0</item>
     </style>
 
 </resources>

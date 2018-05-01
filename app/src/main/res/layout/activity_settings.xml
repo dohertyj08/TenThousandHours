@@ -31,5 +31,12 @@
             android:onClick="setGreen"
             android:text="Set to green theme." />
 
+        <Button
+            android:id="@+id/button_mono_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="setMono"
+            android:text="Set to monochromatic theme." />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
