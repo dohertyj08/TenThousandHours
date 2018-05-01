@@ -3,14 +3,14 @@
     <color name="colorPrimary">#0091EA</color>
     <color name="colorPrimaryDark">#01579B</color>
     <color name="colorAccent">#01579B</color>
-    <color name="color1">#E1F5FE</color>
-    <color name="color2">#B3E5FC</color>
-    <color name="color3">#81D4FA</color>
-    <color name="color4">#4FC3F7</color>
-    <color name="color5">#29B6F6</color>
-    <color name="color6">#03A9F4</color>
-    <color name="color7">#039BE5</color>
-    <color name="color8">#0288D1</color>
-    <color name="color9">#0277BD</color>
-    <color name="color0">#01579B</color>
+    <color name="blue1">#E1F5FE</color>
+    <color name="blue2">#B3E5FC</color>
+    <color name="blue3">#81D4FA</color>
+    <color name="blue4">#4FC3F7</color>
+    <color name="blue5">#29B6F6</color>
+    <color name="blue6">#03A9F4</color>
+    <color name="blue7">#039BE5</color>
+    <color name="blue8">#0288D1</color>
+    <color name="blue9">#0277BD</color>
+    <color name="blue0">#01579B</color>
 </resources>

@@ -5,11 +5,12 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {Skill.class}, version = 1)
+@Database(entities = {Skill.class, Settings.class}, version = 2)
 public abstract class SkillDatabase extends RoomDatabase {
     public static SkillDatabase INSTANCE;
 
     public abstract SkillDao skillDao();
+    public abstract SettingsDao settingsDao();
 
     public static SkillDatabase getDatabase(Context context) {
         if (INSTANCE == null) {

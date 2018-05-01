@@ -2,7 +2,6 @@ package com.james.tenthousandhours;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -45,6 +44,8 @@ public class MainActivity extends ListActivity {
     // this is used to handle the live updates on the ui
     private ScheduledExecutorService executor;
 
+    private String colorScheme;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,22 @@ public class MainActivity extends ListActivity {
             }
         });
 
+        //init settings
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db = SkillDatabase.getDatabase(getApplicationContext());
+                List<Settings> settings = db.settingsDao().getAll();
+                if (settings.size() == 0) {
+                    Settings setting = new Settings("blue", 0);
+                    colorScheme = "blue";
+                    db.settingsDao().insertSettings(setting);
+                } else {
+                    Settings setting = settings.get(0);
+                    colorScheme = setting.getColorscheme();
+                }
+            }
+        });
 
         skillAdapter = new SkillAdapter();
 
@@ -368,6 +385,9 @@ public class MainActivity extends ListActivity {
                 vh.skillInfo.setText(training);
                 vh.skillProgress.setProgress(h.percentToNextLevel(currentTrainingTime));
 
+                int[] colors = new int[10];
+                colors = getColorArray(colorScheme);
+
                 if (intLevel < 10) {
                     vh.skillLevel.setBackgroundColor(getResources().getColor(R.color.color1));
                     vh.skillName.setBackgroundColor(getResources().getColor(R.color.color1));
@@ -431,6 +451,12 @@ public class MainActivity extends ListActivity {
         public TextView skillInfo;
         public TextView skillLevel;
         public ProgressBar skillProgress;
+    }
+
+    public int[] getColorArray(String scheme) {
+        int[] colors = new int[10];
+
+        colors[0] = getResources().ge
     }
 
 }

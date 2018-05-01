@@ -1,5 +1,7 @@
 package com.james.tenthousandhours;
 
+import android.os.AsyncTask;
+
 public class Helpers {
 
     // someday I'll replace this with an algorithm, but until then, its based on the runescape
