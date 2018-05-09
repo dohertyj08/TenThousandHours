@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewSkillActivity extends AppCompatActivity {
@@ -39,6 +40,8 @@ public class NewSkillActivity extends AppCompatActivity {
                     String name = pSkill.getSkillName();
                     EditText skillText = findViewById(R.id.skillName);
                     skillText.setText(name);
+                    TextView explainText = findViewById(R.id.explainText);
+                    explainText.setText("Please enter the updated skill name in the textbox above.");
                     oldId = id;
                 }
             });
