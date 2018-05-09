@@ -35,4 +35,16 @@
     <color name="mono8">#616161</color>
     <color name="mono9">#424242</color>
     <color name="mono0">#212121</color>
+
+    <color name="colorPrimaryOrange">#E65100</color>
+    <color name="orange1">#FFF3E0</color>
+    <color name="orange2">#FFE0B2</color>
+    <color name="orange3">#FFCC80</color>
+    <color name="orange4">#FFB74D</color>
+    <color name="orange5">#FFA726</color>
+    <color name="orange6">#FF9800</color>
+    <color name="orange7">#FB8C00</color>
+    <color name="orange8">#F57C00</color>
+    <color name="orange9">#EF6C00</color>
+    <color name="orange0">#FF6D00</color>
 </resources>

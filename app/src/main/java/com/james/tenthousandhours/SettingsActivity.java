@@ -19,6 +19,8 @@ public class SettingsActivity extends AppCompatActivity {
                 setTheme(R.style.AppThemeGreen);
             } else if (colorScheme.equals("mono")) {
                 setTheme(R.style.AppThemeMono);
+            } else if (colorScheme.equals("orange")) {
+                setTheme(R.style.AppThemeOrange);
             }
         }
 
@@ -58,6 +60,19 @@ public class SettingsActivity extends AppCompatActivity {
                 db = SkillDatabase.getDatabase(getApplicationContext());
                 Settings s = db.settingsDao().findById(0);
                 s.setColorscheme("mono");
+                db.settingsDao().updateSettings(s);
+            }
+        });
+        finish();
+    }
+
+    public void setOrange(View v) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                db = SkillDatabase.getDatabase(getApplicationContext());
+                Settings s = db.settingsDao().findById(0);
+                s.setColorscheme("orange");
                 db.settingsDao().updateSettings(s);
             }
         });

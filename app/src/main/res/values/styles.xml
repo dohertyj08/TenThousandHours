@@ -29,4 +29,10 @@
         <item name="colorAccent">@color/mono0</item>
     </style>
 
+    <style name="AppThemeOrange" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryOrange</item>
+        <item name="colorPrimaryDark">@color/orange0</item>
+        <item name="colorAccent">@color/orange0</item>
+    </style>
+
 </resources>

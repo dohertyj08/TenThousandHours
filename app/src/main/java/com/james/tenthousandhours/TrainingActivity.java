@@ -37,6 +37,8 @@ public class TrainingActivity extends AppCompatActivity {
                 setTheme(R.style.AppThemeGreen);
             } else if (colorScheme.equals("mono")) {
                 setTheme(R.style.AppThemeMono);
+            } else if (colorScheme.equals("orange")) {
+                setTheme(R.style.AppThemeOrange);
             }
         }
 
